@@ -1,0 +1,52 @@
+Employee(E_id, E_name, Age, Salary) 
+mysql> use demo; 
+Database changed 
+mysql> create table Employee5(E_id int not null,E_name varchar(15),Age int,Salary 
+int,Primary key(E_id)); 
+ 
+insert into Employee5 values(5011,'Shanti',25,70500); 
+insert into Employee5 values(5012,'Rohit R',23,58500); 
+insert into Employee5 values(5013,'Mahima K',24,80500); 
+insert into Employee5 values(5014,'Keshav M',26,80800); 
+insert into Employee5 values(5015,'Yukta R',27,70000); 
+ 
+An explicit cursor has four basic operations: 
+• Open: The Cursor is opened, and the result set is populated. 
+• Fetch: The Cursor retrieves a single row from the result set and makes it available for processing. 
+• Close: The Cursor is closed, and the result set is no longer available for processing. 
+• Deallocate: The Cursor is deallocated, and the memory it uses is freed up. 
+ 
+1.Declare a cursor and retrieve all rows from a table: 
+DECLARE cur CURSOR FOR SELECT * FROM Employee5; 
+2. Open a cursor and fetch the first row: 
+OPEN cur; 
+FETCH NEXT FROM cur; 
+3. Loop through all rows in the Cursor: 
+WHILE @@FETCH_STATUS = 0 
+BEGIN 
+    FETCH NEXT FROM cur; 
+END 
+4. Close the Cursor and deallocate memory: 
+CLOSE cur; 
+DEALLOCATE cur; 
+Procedure 1: 
+mysql> delimiter // 
+mysql> create procedure cursor12() -> begin -> declare ID int; -> declare Name varchar(20); -> declare cur cursor for select E_id,E_name from employee5; -> open cur; -> fetch cur into ID,Name; -> select ID,Name; -> close cur; -> end;// 
+Query OK, 0 rows affected (0.18 sec) 
+Procedure 2: 
+mysql> delimiter // 
+mysql> create procedure proc2() -> begin -> declare finished int default 0; -> declare ID int; -> declare Name varchar(20); -> declare cursor2 cursor for select E_id,E_name from employee5; -> declare continue handler for not found set finished=1; 
+    -> open cursor2; 
+    -> loop1:loop fetch cursor2 into ID,Name; 
+    -> if finished then leave loop1; 
+    -> end if; 
+    -> select ID,Name; 
+    -> end loop; 
+    -> close cursor2; 
+    -> end // 
+Query OK, 0 rows affected (0.12 sec) 
+ 
+mysql> call proc2();// 
+ 
+ 
+ 
