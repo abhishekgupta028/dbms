@@ -1,0 +1,35 @@
+1.Create Employee Containing all Records:  
+a. mysql> use demo; 
+Database changed 
+b. mysql> create table Employee3(E_id int auto_increment,E_name varchar(20),Age 
+integer,Salary int,primary key(E_id)); 
+Query OK, 0 rows affected (0.94 sec) 
+ 
+insert into Employee3 values(101,'Sharada',24,50000); 
+insert into Employee3 values(102,'Ronald',22,55000); 
+insert into Employee3 values(103,'Mihir',26,59000); 
+insert into Employee3 values(104,'Aayushi',23,57000); 
+insert into Employee3 values(105,'Ribika',24,60000); 
+ 
+c. mysql> Desc Employee3; 
+  
+ 
+2.Count number of Employee: 
+mysql> Select Count(*) from Employee3; 
+ 
+3.Find Maximum Age from Employee Table: 
+mysql> select Max(Age) as MAX_AGE from Employee3; 
+ 
+4.Find Minimum Age from Employee Table: 
+mysql> select Min(Age) as MIN_AGE from Employee3; 
+ 
+5.Find Salary of employee in Ascending order : 
+mysql> select * from Employee3 order by Salary ASC; 
+ 
+ 
+ 
+ 
+ 
+ 
+6. Find grouped salaries of employees: 
+mysql> Select count(E_id),Age from Employee3 Group by Age; 
