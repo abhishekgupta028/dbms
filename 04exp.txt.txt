@@ -1,0 +1,52 @@
+CUSTOMERS(ID,NAME,AGE,ADDRESS,SALARY) 
+ 
+1.UPDATE Trigger : 
+delimiter $$ 
+CREATE TRIGGER display_salary 
+AFTER UPDATE ON customer  
+FOR EACH ROW  
+BEGIN 
+   DECLARE saldiff INT; 
+IF(NEW.ID > 0)THEN 
+   set @saldiff = NEW.salary-OLD.salary; 
+   insert into sal_diff values(new.id,new.name,@saldiff); 
+   update salary_budget set total=total+@saldiff; 
+END IF;  
+END$$ 
+delimiter ; 
+2.INSERT Trigger: 
+DELIMITER $$ 
+CREATE TRIGGER newcustomer 
+BEFORE INSERT ON customer 
+FOR EACH ROW 
+BEGIN 
+    if(new.id>0)then 
+    insert into sal_diff values(new.id,new.name,0); 
+    UPDATE salary_budget SET total = total+new.salary; 
+end if; 
+END$$     
+DELIMITER ; 
+ 
+3.DELETE Trigger: 
+Delimiter  $$ 
+CREATE TRIGGER after_sal_delete 
+AFTER DELETE 
+ON customer 
+FOR EACH ROW 
+UPDATE salary_budget  
+SET total = total - old.salary; 
+end$$ 
+Delimiter ; 
+ 
+Trigger Execution 
+To see running Triggers: 
+mysql> show triggers; 
+ 
+ Insert Trigger 
+ 
+ 
+ 
+DROP the Trigger: 
+mysql> drop trigger display_salary; 
+     
+Query OK, 0 rows affected (0.11 sec)
